@@ -30,11 +30,19 @@
     padding: 3mm 4mm; margin-bottom: 4.5mm;
   }
   .abstract p:last-child { margin: 0; }
+  .fig-wide { max-width: 100mm; margin: 0 auto 1mm; }
+  .fig-wide img { width: 100%; display: block; }
   .row { display: flex; gap: 5mm; align-items: flex-start; margin-bottom: 3.5mm; }
   .txt { flex: 1 1 0; }
   .txt p:last-child { margin: 0; }
   .fig { flex: 0 0 78mm; }
   .fig img { width: 100%; display: block; }
+  .cap {
+    font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 7.4pt; line-height: 1.38; color: #52514e;
+    margin: 1.4mm 0 0; padding-top: 1.2mm; border-top: 1px solid #e5e4e0;
+  }
+  .cap strong { color: #14140f; font-weight: 700; }
   code {
     font: 9.8pt/1.3 "SF Mono", Menlo, monospace; display: block;
     margin: 2mm 0 2.5mm; letter-spacing: -.2pt;
@@ -92,26 +100,35 @@
   <h3>3.1 Error rates are not balanced across groups</h3>
   <div class="row">
     <div class="txt">
-      <p>Among defendants who did not reoffend, 44.8 percent of Black defendants were flagged
+      <p>As shown in Figure 1, among defendants who did not reoffend, 44.8 percent of Black
+      defendants were flagged
       high risk compared with 23.5 percent of white defendants. The asymmetry inverts for the
       complementary error. Among defendants who did reoffend, 47.7 percent of white defendants
       were classified low risk compared with 28.0 percent of Black defendants.</p>
       <p>Each error type falls predominantly on a different group. In a custodial context the
       two errors do not carry equivalent costs.</p>
     </div>
-    <div class="fig"><img src="images/1_error_rates.png" alt="False positive and false negative rates by race"></div>
+    <div class="fig">
+      <img src="images/1_error_rates.png" alt="False positive and false negative rates by race">
+      <p class="cap"><strong>Figure 1.</strong> False positive and false negative rates by
+      race. COMPAS risk score, Broward County FL, 2013 to 2014 (n = 7,214). Source: ProPublica.</p>
+    </div>
   </div>
 
   <h3>3.2 Predictive parity holds</h3>
   <div class="row">
     <div class="txt">
-      <p>Conditional on score, outcomes are close to identical across groups. Positive
+      <p>Conditional on score, outcomes are close to identical across groups (Figure 2). Positive
       predictive value is 0.63 for Black defendants and 0.59 for white defendants. Reoffence
       rates by decile track one another across the full scale.</p>
       <p>By the calibration standard advanced in the rebuttal the instrument is defensible. It
       does not systematically overstate risk for either group.</p>
     </div>
-    <div class="fig"><img src="images/2_calibration.png" alt="Reoffence rate by decile score and race"></div>
+    <div class="fig">
+      <img src="images/2_calibration.png" alt="Reoffence rate by decile score and race">
+      <p class="cap"><strong>Figure 2.</strong> Observed two year reoffence rate by COMPAS
+      decile score and race. Overlapping curves indicate predictive parity. Source: ProPublica.</p>
+    </div>
   </div>
 
   <h3>3.3 The two criteria are mutually exclusive</h3>
@@ -124,7 +141,15 @@
   times. In the ratio of the two false positive rates the PPV and FNR terms cancel. What
   remains is exactly the base rate odds ratio, which is a property of the populations and is
   invariant to the choice of operating point. This was confirmed across 800 parameter
-  combinations.</p>
+  combinations. Figure 3 sets the observed disparity against the disparity a perfectly
+  even handed instrument would still produce.</p>
+  <!-- FIGURE 3: delete this block, or drop max-width to 85mm, if the report runs to 2 pages -->
+  <div class="fig-wide">
+    <img src="images/3_impossibility.png" alt="Observed versus forced false positive disparity">
+    <p class="cap"><strong>Figure 3.</strong> Observed false positive disparity compared with
+    the disparity forced by unequal base rates alone, holding positive predictive value and
+    false negative rate equal across groups.</p>
+  </div>
 </section>
 
 <section>
