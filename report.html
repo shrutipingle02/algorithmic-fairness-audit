@@ -1,0 +1,153 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Incompatible Fairness Criteria in Recidivism Risk Scoring</title>
+<style>
+  @page { size: letter; margin: 15mm 16mm; }
+  * { box-sizing: border-box; }
+  body {
+    font: 9.7pt/1.42 "Iowan Old Style", Georgia, "Times New Roman", serif;
+    color: #14140f; background: #fff; margin: 0; max-width: 184mm;
+  }
+  header { border-bottom: 1.5px solid #14140f; padding-bottom: 3mm; margin-bottom: 4mm; }
+  h1 { font-size: 15pt; line-height: 1.22; margin: 0 0 2mm; letter-spacing: -.2pt; }
+  .meta {
+    font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 8.4pt; color: #52514e; margin: 0;
+  }
+  h2 {
+    font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 8.8pt; text-transform: uppercase; letter-spacing: .7pt;
+    margin: 0 0 1.8mm; color: #14140f;
+  }
+  h3 {
+    font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 8.6pt; margin: 0 0 1.4mm; color: #14140f;
+  }
+  p { margin: 0 0 2.5mm; }
+  section { margin-bottom: 4mm; }
+  .abstract {
+    background: #f7f7f5; border-left: 2.5px solid #2a78d6;
+    padding: 3mm 4mm; margin-bottom: 4.5mm;
+  }
+  .abstract p:last-child { margin: 0; }
+  .row { display: flex; gap: 5mm; align-items: flex-start; margin-bottom: 3.5mm; }
+  .txt { flex: 1 1 0; }
+  .txt p:last-child { margin: 0; }
+  .fig { flex: 0 0 78mm; }
+  .fig img { width: 100%; display: block; }
+  code {
+    font: 9.8pt/1.3 "SF Mono", Menlo, monospace; display: block;
+    margin: 2mm 0 2.5mm; letter-spacing: -.2pt;
+  }
+  footer {
+    border-top: 1px solid #d8d7d2; padding-top: 2.2mm;
+    font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 7.5pt; color: #52514e; line-height: 1.48;
+  }
+  footer p { margin: 0 0 1.2mm; }
+  footer p:last-child { margin: 0; }
+  strong { font-weight: 700; }
+</style>
+
+<header>
+  <h1>Incompatible Fairness Criteria in Recidivism Risk Scoring:<br>
+  A Replication of the COMPAS Dispute</h1>
+  <p class="meta"><strong>Shruti Pingle</strong> &nbsp;|&nbsp; August 2026 &nbsp;|&nbsp;
+  Replication study</p>
+</header>
+
+<div class="abstract">
+  <p><strong>Executive summary.</strong> The 2016 dispute over the COMPAS recidivism score
+  was not a disagreement about facts. ProPublica found that the errors of the score fall
+  disproportionately on Black defendants. Northpointe found that the score is equally
+  predictive across groups. Both findings replicate exactly against the published data. They
+  are compatible because they measure different properties. Where group base rates differ
+  these properties cannot both be satisfied. The observed disparity is therefore not an
+  artefact of model construction and would not be removed by a better model.</p>
+</div>
+
+<section>
+  <h2>1. Background</h2>
+  <p>COMPAS assigns criminal defendants a risk score from 1 to 10, which courts use to inform
+  bail and sentencing decisions. In 2016 ProPublica concluded the instrument was biased against
+  Black defendants and the vendor published a rebuttal concluding it was not. The argument that
+  followed treated the two positions as contradictory. This report tests whether they are.</p>
+</section>
+
+<section>
+  <h2>2. Data and method</h2>
+  <p>The analysis uses the public ProPublica release of 7,214 defendants screened in Broward
+  County, Florida between 2013 and 2014, with re-arrest outcomes observed over two years.
+  Following the original specification, risk categories are collapsed into a binary prediction
+  in which Medium and High count as flagged. Every figure below was validated cell by cell
+  against the published contingency tables of the source analysis, and that verification is
+  scripted so it fails on any drift. A secondary specification applying the 30 day arrest to
+  screening filter is reported as a robustness check. The measured disparity is 1.9 times
+  under both.</p>
+</section>
+
+<section>
+  <h2>3. Findings</h2>
+
+  <h3>3.1 Error rates are not balanced across groups</h3>
+  <div class="row">
+    <div class="txt">
+      <p>Among defendants who did not reoffend, 44.8 percent of Black defendants were flagged
+      high risk compared with 23.5 percent of white defendants. The asymmetry inverts for the
+      complementary error. Among defendants who did reoffend, 47.7 percent of white defendants
+      were classified low risk compared with 28.0 percent of Black defendants.</p>
+      <p>Each error type falls predominantly on a different group. In a custodial context the
+      two errors do not carry equivalent costs.</p>
+    </div>
+    <div class="fig"><img src="images/1_error_rates.png" alt="False positive and false negative rates by race"></div>
+  </div>
+
+  <h3>3.2 Predictive parity holds</h3>
+  <div class="row">
+    <div class="txt">
+      <p>Conditional on score, outcomes are close to identical across groups. Positive
+      predictive value is 0.63 for Black defendants and 0.59 for white defendants. Reoffence
+      rates by decile track one another across the full scale.</p>
+      <p>By the calibration standard advanced in the rebuttal the instrument is defensible. It
+      does not systematically overstate risk for either group.</p>
+    </div>
+    <div class="fig"><img src="images/2_calibration.png" alt="Reoffence rate by decile score and race"></div>
+  </div>
+
+  <h3>3.3 The two criteria are mutually exclusive</h3>
+  <p>False positive rate, positive predictive value, false negative rate and prevalence are
+  related by identity:</p>
+  <code>FPR = ( p / (1 &minus; p) ) &times; ( (1 &minus; PPV) / PPV ) &times; ( 1 &minus; FNR )</code>
+  <p>Any three of these quantities determine the fourth. Base rates in this population are
+  51.4 percent and 39.4 percent. Imposing equal positive predictive value and equal false
+  negative rate across groups therefore still produces a false positive disparity of 1.63
+  times. In the ratio of the two false positive rates the PPV and FNR terms cancel. What
+  remains is exactly the base rate odds ratio, which is a property of the populations and is
+  invariant to the choice of operating point. This was confirmed across 800 parameter
+  combinations.</p>
+</section>
+
+<section>
+  <h2>4. Implications</h2>
+  <p>Fairness is not a single quantity available for optimisation. Equal predictive value and
+  equal error rates are competing definitions. Selecting between them determines which error a
+  system prefers to make and therefore who bears the cost of it. That selection is a policy
+  judgement. Assigning it to model development conceals the decision rather than resolving it,
+  and leaves an accountable choice embedded in a technical artefact.</p>
+</section>
+
+<footer>
+  <p><strong>Limitations.</strong> The outcome variable records re-arrest and not offending.
+  Arrest probability is conditioned on enforcement patterns, so the base rate differential is
+  partly endogenous to policing and is not a direct behavioural measure. Calibration is not
+  strictly monotonic for white defendants above decile 8, where sample sizes are 114, 98 and
+  64. Confidence intervals at those deciles overlap substantially and the reversal is
+  consistent with sampling variation. Findings are specific to one jurisdiction and one period
+  and do not generalise without further work.</p>
+  <p><strong>References.</strong> Angwin J, Larson J, Mattu S, Kirchner L. Machine Bias.
+  ProPublica, 23 May 2016; data at github.com/propublica/compas-analysis. Chouldechova A. Fair
+  prediction with disparate impact. arXiv:1703.00056, 2017. Kleinberg J, Mullainathan S,
+  Raghavan M. Inherent Trade-Offs in the Fair Determination of Risk Scores. ITCS 2017,
+  arXiv:1609.05807. This report reproduces the cited analyses and does not originate them.</p>
+  <p><strong>Replication code.</strong> github.com/shrutipingle02/algorithmic-fairness-audit</p>
+</footer>
