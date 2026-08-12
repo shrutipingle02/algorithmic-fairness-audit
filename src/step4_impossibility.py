@@ -95,8 +95,37 @@ for race in races:
         race, p, forced_fpr))
 
 gap = results["African-American"] / results["Caucasian"]
-print("\n  Even with an identical tool, the FPR gap is {:.1f}x.".format(gap))
+print("\n  Even with an identical tool, the FPR gap is {:.2f}x.".format(gap))
 print("  Nothing about the model caused this. Only the base rates differ.")
+
+
+# I first assumed this gap would move if I picked a different PPV or FNR.
+# It does not, and the algebra says why. Taking the ratio of the two FPRs,
+# the (1-PPV)/PPV and (1-FNR) terms are the same on top and bottom, so they
+# cancel, and all that survives is the ratio of the base-rate ODDS:
+#
+#     FPR_1 / FPR_2  =  odds(p_1) / odds(p_2)      where odds(p) = p / (1-p)
+#
+# So the gap is fixed by the two populations alone. No model can change it.
+p_b, _, _, _ = get_numbers("African-American")
+p_w, _, _, _ = get_numbers("Caucasian")
+odds_ratio = (p_b / (1 - p_b)) / (p_w / (1 - p_w))
+
+print("\n  Predicted from the base rates alone: {:.4f}x".format(odds_ratio))
+print("  Measured from the formula above:     {:.4f}x".format(gap))
+print("  These agree, so the gap does not depend on PPV or FNR at all.")
+
+# Proving it rather than asserting it: try lots of PPV/FNR combinations
+# and confirm the ratio never budges.
+ratios = []
+for test_ppv in [0.4, 0.5, 0.6, 0.7, 0.8, 0.9]:
+    for test_fnr in [0.1, 0.3, 0.5, 0.7, 0.9]:
+        ratios.append(formula(p_b, test_ppv, test_fnr) /
+                      formula(p_w, test_ppv, test_fnr))
+
+print("\n  Tried {} different PPV/FNR combinations.".format(len(ratios)))
+print("  Smallest gap: {:.4f}x   Largest gap: {:.4f}x".format(min(ratios), max(ratios)))
+print("  Identical, exactly as the cancellation predicts.")
 
 
 # ---------------------------------------------------------------------------
